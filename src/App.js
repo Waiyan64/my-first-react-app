@@ -1,43 +1,114 @@
 import "./App.css";
-import React from "react";
 import { useState } from "react";
+import { validateEmail } from "./utils";
 
+const PasswordErrorMessage = () => {
+  return (
+    <p className="FieldError">Password should have at least 8 characters</p>
+  );
+};
 
 function App() {
-  const [score, setScore ] = useState("10");
-  const [comment, setComment] = useState("");
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState({
+    value: "",
+    isTouched: false,
+  });
+  const [role, setRole] = useState("role");
+
+  const getIsFormValid = () => {
+    // Implement this function
+    return (
+      firstName &&
+      validateEmail(email) &&
+      password.value.length >= 8 &&
+      role != "role"
+    );
+  };
+
+  const clearForm = () => {
+    // Implement this function
+    setFirstName("");
+    setLastName("");
+    setEmail("");
+    setPassword({
+      value: "",
+      isTouched: false,
+    });
+    setRole("role");
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (Number(score) <= 5 && comment.length <= 10) {
-      alert("Please provide a comment explaining why the experience was poor");
-      return;
-    }
+    alert("Account created!");
+    clearForm();
+  };
 
-    console.log("Form submitted!");
-    setComment("");
-    setScore("10");
-  } 
-  
   return (
     <div className="App">
       <form onSubmit={handleSubmit}>
         <fieldset>
-          <h2>Feedback form</h2>
+          <h2>Sign Up</h2>
           <div className="Field">
-            <label>Score: {score}</label>
+            <label>
+              First name <sup>*</sup>
+            </label>
             <input 
-            type="range" 
-            min="0" 
-            max="10"
-            value = {score}
-            onChange = {e => setScore(e.target.value)} />
+            value={firstName}
+            placeholder="First name" 
+            onChange={ e => setFirstName(e.target.value)} />
           </div>
           <div className="Field">
-            <label>Comment:</label>
-            <textarea value = {comment} onChange={e => setComment(e.target.value)} />
+            <label>Last name</label>
+            <input 
+            value={lastName}
+            placeholder="Last name" 
+            onChange={ e => setLastName(e.target.value)} />
           </div>
-          <button type="submit">Submit</button>
+          <div className="Field">
+            <label>
+              Email address <sup>*</sup>
+            </label>
+            <input 
+            value={email}
+            placeholder="Email address" 
+            onChange={ e => setEmail(e.target.value)} />
+          </div>
+          <div className="Field">
+            <label>
+              Password <sup>*</sup>
+            </label>
+            <input 
+            value={password.value}
+            type="password"
+            onChange={(e) => {
+              setPassword({ ...password, value: e.target.value})
+            }}
+            onBlur = {() => {
+              setPassword({ ...password, isTouched: true});
+            }}
+            placeholder ="Password"
+            />
+            {password.isTouched && password.value.length <8 ? (<PasswordErrorMessage />
+            ) : null }
+          </div>
+          <div className="Field">
+            <label>
+              Role <sup>*</sup>
+            </label>
+            <select 
+            value={role}
+            onChange={e => setRole(e.target.value) }>
+              <option value="role">Role</option>
+              <option value="individual">Individual</option>
+              <option value="business">Business</option>
+            </select>
+          </div>
+          <button type="submit" disabled={!getIsFormValid()}>
+            Create account
+          </button>
         </fieldset>
       </form>
     </div>
