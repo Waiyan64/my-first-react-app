@@ -1,27 +1,24 @@
 import React from "react";
 
 function App() {
-  const [user, setUser] = React.useState([]);
+  const formInputRef = React.useRef(null);
+  const focusInput = () => {
+    formInputRef.current.focus();
+  }
 
-  const fetchData = () => {
-    fetch("https://randomuser.me/api/?results=1")
-    .then((response) => response.json())
-    .then((data) => setUser(data)); 
-  };
 
-  React.useEffect(() => {
-    fetchData();
-  }, []);
-
-  return Object.keys(user).length > 0 ? (
-   <div style={{padding: "40px"}}>
-      <h1>Customer data</h1>
-      <h2>Name: {user.results[0].name.first}</h2>
-      <img src={user.results[0].picture.large} alt="" />
-    </div> 
-  ) : (
-    <h1>Data pending...</h1>
-  );
+return (
+  <>
+    <h1>Using useFef to access underlying DOM</h1>
+    <input ref={formInputRef} type="text" />
+    <button onClick={focusInput}>
+      Focus Input
+    </button>
+  </>
+)
 }
+
+
+
 
 export default App;
