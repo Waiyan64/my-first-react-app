@@ -1,23 +1,36 @@
-import React from "react";
-import { useState } from "react";
-import useConsoleLog from "./useConsoleLog";
+import "./App.css";
+
+const Button = ({children, backgroundColor}) => {
+  return <button style={{backgroundColor}}>{children}</button>;
+};
+
+const Alert = ({ children }) => {
+  return (
+    <>
+      
+      <div className="Alert">{children}</div>
+    </>
+  );
+};
+
+const DeleteButton = () => {
+  return <Button backgroundColor="red">Delete</Button>
+};
 
 function App() {
-  const [value, setValue] = useState(0);
-  useConsoleLog(value);
-  const increment = () => {
-    setValue(prevValue => prevValue + 1)
-  }
-  
   return (
-    <div>
-      <h1>Count: {value}</h1>
-      <button onClick={increment}>Increment</button>
+    <div className="App">
+      <header>Little Lemon Restaurant</header>
+      <Alert>
+        <h4>Delete Account</h4>
+        <p>
+          Are you sure you wnat to proceed? You will miss all your delicious recipes!
+        </p>
+        <DeleteButton />
+      </Alert>
     </div>
- 
-  )
-
-}
+  );
+};
 
 
 
