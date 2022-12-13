@@ -1,38 +1,40 @@
 import "./App.css";
 
-const Button = ({children, backgroundColor}) => {
-  return <button style={{backgroundColor}}>{children}</button>;
-};
-
-const Alert = ({ children }) => {
+const Button = ({ type, children, ...buttonProps }) => {
+  const className = type === "primary" ? "PrimaryButton" : "SecondaryButton";
   return (
-    <>
-      
-      <div className="Alert">{children}</div>
-    </>
+    <button className = {`Button ${className}`} {...buttonProps}>
+      {children}
+    </button>
   );
 };
 
-const DeleteButton = () => {
-  return <Button backgroundColor="red">Delete</Button>
+const LoginButton = ({ type, children, ...buttonProps }) => {
+  return (
+    <Button 
+    type = "secondary"
+    {...buttonProps}
+    onClick = {() => {
+      alert("Logging in!");
+    }}
+    >
+      {children}
+    </Button>
+  );
 };
 
 function App() {
   return (
     <div className="App">
-      <header>Little Lemon Restaurant</header>
-      <Alert>
-        <h4>Delete Account</h4>
-        <p>
-          Are you sure you wnat to proceed? You will miss all your delicious recipes!
-        </p>
-        <DeleteButton />
-      </Alert>
+      <header className="Header">Little Lemon Restaurant</header>
+      <Button type="primary" onClick={() => alert("Signing up!")}>
+        Sign up
+      </Button>
+      <LoginButton type="secondary" >
+        Login
+      </LoginButton>
     </div>
   );
-};
-
-
-
+}
 
 export default App;
