@@ -1,66 +1,65 @@
 import "./App.css";
 import { useState, useEffect } from "react";
 
-const withMousePosition = (WrappedComponent) => {
-  return (props) => {
-    const {mousePosition, setMousePosition} = useState({
-      x: 0,
-      y: 0,
-    })
+const MousePosition = ({render}) => {
+  const [mousePosition, setMousePosition] = useState({
+    x: 0,
+    y: 0,
+  })
 
-    useEffect(() => {
-      const handleMousePositiononChange = (e) => {
-        setMousePosition({
-          x: e.clientX,
-          y: e.clientY,
-        });
-      };
-      window.addEventListener("mousemove", handleMousePositiononChange);
-      
-      return () => {
-        window.removeEventListener("mousemove", handleMousePositiononChange);
-      };
-    }, []);
+  useEffect(() => {
+    const handleMousePositiononChange = (e) => {
+      setMousePosition({
+        x: e.clientX,
+        y: e.clientY,
+      });
+    };
     
-    return <WrappedComponent {...props} mousePosition={mousePosition} />;
-  };
+    window.addEventListener("mousemove", handleMousePositiononChange);
+      
+    return () => {
+      window.removeEventListener("mousemove", handleMousePositiononChange);
+      };
+  }, []);
+    
+  return render({mousePosition});
 };
 
-const PanelMouseLogger = ({mousePosition}) => {
-  if (!mousePosition) {
-    return null;
-  }
+
+const PanelMouseLogger = () => {
+  
   return (
     <div className="BasicTracker">
-      <p>Mouse position:</p>
+      <p>Mouse Position:</p>
       <div className="Row">
-        <span>x: {mousePosition.x}</span>
-        <span>y: {mousePosition.y}</span>
+        <MousePosition 
+        render={({mousePosition}) => <p>{mousePosition.x}</p>}
+        />
+        <MousePosition 
+        render={({mousePosition}) => <p>{mousePosition.y}</p>}
+        />
       </div>
     </div>
   );
 };
 
-const PointMouseLogger = ({ mousePosition }) => {
-  if (!mousePosition) {
-    return null;
-  }
+const PointMouseLogger = () => {
+
   return (
     <p>
-      ({mousePosition.x}, {mousePosition.y})
+      <MousePosition 
+      render ={({mousePosition}) =><p>{mousePosition.x}, {mousePosition.y}</p>}
+      />
     </p>
   );
 };
-
-const PanelMouseTracker = withMousePosition(PanelMouseLogger);
-const PointMouseTracker = withMousePosition(PointMouseLogger);
 
 function App() {
   return (
     <div className="App">
       <header className="Header">Little Lemon Restaurant</header>
-      <PanelMouseTracker />
-      <PointMouseTracker />
+      <PanelMouseLogger />
+      <PointMouseLogger />
     </div>
   );
 };
